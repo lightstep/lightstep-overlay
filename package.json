@@ -1,15 +1,25 @@
 {
   "name": "lightstep-overlay",
   "version": "1.0.0",
-  "description": "An overlay that surfaces traces connectedw to the current view",
+  "description": "an HTML debug overlay with status information about the running cruntime",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack --display-error-details"
   },
   "keywords": [
     "lightstep",
     "tracing"
   ],
   "author": "duncangraham <duncan@lightstep.com> (http://lightstep.com)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.3.26",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "json-loader": "^0.5.4",
+    "webpack": "^1.12.9"
+  }
 }
