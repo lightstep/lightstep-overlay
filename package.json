@@ -1,0 +1,15 @@
+{
+  "name": "lightstep-overlay",
+  "version": "1.0.0",
+  "description": "An overlay that surfaces traces connectedw to the current view",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lightstep",
+    "tracing"
+  ],
+  "author": "duncangraham <duncan@lightstep.com> (http://lightstep.com)",
+  "license": "ISC"
+}
