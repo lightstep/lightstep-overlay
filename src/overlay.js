@@ -126,6 +126,7 @@ function updateDebugOverlay(tracer, enabled) {
             container.appendChild(count);
 
             overlay = document.createElement("div");
+            overlay.id = HOST_DIV_ID;
             var close = document.createElement("div");
             link = document.createElement("a");
             link.href = url;
