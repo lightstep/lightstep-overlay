@@ -190,21 +190,7 @@ function updateDebugOverlay(tracer, enabled) {
         for (let i = 0; i < joinedSpans.length && totalLinks <= kMaxSpans; i++) {
             let span = joinedSpans[i];
 
-            div = document.createElement("div");
-            div.className = "lightstep_span";
-
-            link = document.createElement("a");
-            link.href = `${url}trace?span_guid=${span.span_guid}&at_micros=${span.youngest_micros}`;
-            link.style.color = "#e0e0e0";
-            link.style.padding = '.5em';
-            link.style.lineHeight = '1.25em';
-            link.style.display = 'block';
-            link.appendChild(document.createTextNode(joinedSpans[i].summary));
-            div.appendChild(link);
-
-            overlay.appendChild(div);
             totalLinks++;
-            console.log(totalLinks)
             count.innerHTML = totalLinks;
         }
     });
