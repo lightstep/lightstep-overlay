@@ -31,8 +31,10 @@ function updateDebugOverlay(tracer, enabled) {
             return;
         }
 
-        let link, logo, div, count;
+        let container, link, logo, div, count;
         let opts = tracer.options();
+        let kMaxSpans = 4;
+        let totalLinks = 0;
 
         // Make a guess about whether we are reporting to a dev instance or not
         // based on the ports being used.
@@ -52,7 +54,7 @@ function updateDebugOverlay(tracer, enabled) {
         var overlay = document.getElementById(HOST_DIV_ID);
         if (!overlay) {
         
-            let container = document.createElement('div');
+            container = document.createElement('div');
             container.style.position = "fixed";
             container.style.bottom = "2em";
             container.style.right = "2em";
@@ -62,7 +64,9 @@ function updateDebugOverlay(tracer, enabled) {
             container.style.cursor = "pointer";
             container.style.background = 'rgb(0, 163, 255)';
             container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
-            container.style.transition = '.5s all';
+            container.style.transition = '.2s all';
+            container.style.transform = 'scale(0)';
+            container.style.opacity = '0';
 
 
             let btn = document.createElement('div');
@@ -82,22 +86,6 @@ function updateDebugOverlay(tracer, enabled) {
             badge.style.position = 'absolute';
             badge.style.top = '0em';
             badge.style.right = '0em';
-
-
-            container.onmouseenter = function(e) {
-              btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
-              btn.style.boxShadow = 'inset 0 0 0 2px #FFF, inset 0 0 0 3px rgb(29, 184, 228)';
-              btn.style.opacity = '1'
-              container.style.boxShadow = 'rgb(196, 196, 196) 0px 0px 0px 1px, rgb(184, 184, 184) 0px 4px 30px 0px';
-              container.style.opacity = '1'
-            };
-            
-            container.onmouseleave = function(e) {
-              btn.style.boxShadow = '0 0 0 0 transparent';
-              btn.style.opacity = '0';
-            container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
-              container.style.opacity = '.9'
-            };
 
 
             logo = document.createElement('img');
@@ -120,6 +108,27 @@ function updateDebugOverlay(tracer, enabled) {
             count.style.backgroundColor = '#ff7a7a';
             count.style.color = '#FFF';
 
+            container.onmouseenter = function(e) {
+              btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
+              btn.style.boxShadow = 'inset 0 0 0 2px #FFF, inset 0 0 0 3px rgb(29, 184, 228)';
+              btn.style.opacity = '1'
+              container.style.boxShadow = 'rgb(196, 196, 196) 0px 0px 0px 1px, rgb(184, 184, 184) 0px 4px 30px 0px';
+              container.style.opacity = '1'
+              count.innerHTML = 'x';
+            };
+            
+            container.onmouseleave = function(e) {
+              btn.style.boxShadow = '0 0 0 0 transparent';
+              btn.style.opacity = '0';
+              container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
+              container.style.opacity = '.9'
+              count.innerHTML = totalLinks;
+            };
+
+            count.onclick = function(e) {
+              container.style.transform = 'scale(0)';
+              container.style.opacity = '0';
+            }
 
             container.appendChild(btn);
             container.appendChild(logo);
@@ -137,10 +146,16 @@ function updateDebugOverlay(tracer, enabled) {
 
             document.body.appendChild(overlay);
             document.body.appendChild(container);
+
+            //once all that stuff is done
+            container.style.opacity = '0';
+
+            window.getComputedStyle(container).opacity;
+
+            container.style.transform = 'scale(1)';
+            container.style.opacity = '1';
         }
 
-        let kMaxSpans = 4;
-        let totalLinks = 0;
 
         for (let i = 0; i < overlay.childNodes.length; i++) {
             let child = overlay.childNodes[i];
@@ -194,5 +209,6 @@ function updateDebugOverlay(tracer, enabled) {
             totalLinks++;
             count.innerHTML = totalLinks;
         }
+
     });
 }
