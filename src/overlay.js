@@ -31,10 +31,12 @@ function updateDebugOverlay(tracer, enabled) {
             return;
         }
 
+
         let container, link, logo, div, count;
         let opts = tracer.options();
         let kMaxSpans = 4;
         let totalLinks = 0;
+
 
         // Make a guess about whether we are reporting to a dev instance or not
         // based on the ports being used.
@@ -49,12 +51,17 @@ function updateDebugOverlay(tracer, enabled) {
             url = `https://${host}/${opts.access_token}/`;
         }
 
+        console.log('==============================')
+        console.log(url)
+        console.log('==============================')
+
         // Check if the element is there, as some in-page script might have
         // cleared the BODY, etc.
         var overlay = document.getElementById(HOST_DIV_ID);
         if (!overlay) {
         
-            container = document.createElement('div');
+            container = document.createElement('a');
+            container.href = url + 'latest?q=tracer.guid:' + spans[0].runtime_guid;
             container.style.position = "fixed";
             container.style.bottom = "2em";
             container.style.right = "2em";
@@ -72,6 +79,7 @@ function updateDebugOverlay(tracer, enabled) {
             let btn = document.createElement('div');
             btn.style.width = '100%';
             btn.style.height = '100%';
+            btn.style.display = 'block';
             btn.style.borderRadius = "3em";
             btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
             btn.style.opacity = '0';
@@ -126,6 +134,9 @@ function updateDebugOverlay(tracer, enabled) {
             };
 
             count.onclick = function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+
               container.style.transform = 'scale(0)';
               container.style.opacity = '0';
             }
