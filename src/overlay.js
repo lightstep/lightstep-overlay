@@ -51,10 +51,6 @@ function updateDebugOverlay(tracer, enabled) {
             url = `https://${host}/${opts.access_token}/`;
         }
 
-        console.log('==============================')
-        console.log(url)
-        console.log('==============================')
-
         // Check if the element is there, as some in-page script might have
         // cleared the BODY, etc.
         var overlay = document.getElementById(HOST_DIV_ID);
