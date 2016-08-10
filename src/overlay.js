@@ -2,7 +2,7 @@
 // Provide an HTML debug overlay DIV with status information about the running
 // cruntime.
 //
-var gDebugOverlayEnabled = false;
+let gDebugOverlayEnabled = false;
 
 // NOTE: this relies directly on the LightStep implementation and not on the
 // OpenTracing APIs
@@ -25,7 +25,7 @@ function updateDebugOverlay(tracer, enabled) {
 
     gDebugOverlayEnabled = true;
 
-    tracer.on("report", function(report) {
+    tracer.on('report', function (report) {
         let spans = report.span_records;
         if (!spans || spans.length === 0) {
             return;
@@ -46,25 +46,24 @@ function updateDebugOverlay(tracer, enabled) {
         } else {
             let host = opts.collector_host;
             if (host.match(/^collector[.-]/)) {
-                host = host.replace(/^collector([.-])/, "app$1")
+                host = host.replace(/^collector([.-])/, 'app$1');
             }
             url = `https://${host}/${opts.access_token}/`;
         }
 
         // Check if the element is there, as some in-page script might have
         // cleared the BODY, etc.
-        var overlay = document.getElementById(HOST_DIV_ID);
+        let overlay = document.getElementById(HOST_DIV_ID);
         if (!overlay) {
-        
             container = document.createElement('a');
             container.href = url + 'latest?q=tracer.guid:' + spans[0].runtime_guid;
-            container.style.position = "fixed";
-            container.style.bottom = "2em";
-            container.style.right = "2em";
-            container.style.width = "3em";
-            container.style.height = "3em";
-            container.style.borderRadius = "3em";
-            container.style.cursor = "pointer";
+            container.style.position = 'fixed';
+            container.style.bottom = '2em';
+            container.style.right = '2em';
+            container.style.width = '3em';
+            container.style.height = '3em';
+            container.style.borderRadius = '3em';
+            container.style.cursor = 'pointer';
             container.style.background = 'rgb(0, 163, 255)';
             container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
             container.style.transition = '.2s all';
@@ -76,7 +75,7 @@ function updateDebugOverlay(tracer, enabled) {
             btn.style.width = '100%';
             btn.style.height = '100%';
             btn.style.display = 'block';
-            btn.style.borderRadius = "3em";
+            btn.style.borderRadius = '3em';
             btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
             btn.style.opacity = '0';
             btn.style.boxShadow = '0 0 0 0 transparent';
@@ -112,41 +111,41 @@ function updateDebugOverlay(tracer, enabled) {
             count.style.backgroundColor = '#ff7a7a';
             count.style.color = '#FFF';
 
-            container.onmouseenter = function(e) {
-              btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
-              btn.style.boxShadow = 'inset 0 0 0 2px #FFF, inset 0 0 0 3px rgb(29, 184, 228)';
-              btn.style.opacity = '1'
-              container.style.boxShadow = 'rgb(196, 196, 196) 0px 0px 0px 1px, rgb(184, 184, 184) 0px 4px 30px 0px';
-              container.style.opacity = '1'
-              count.innerHTML = 'x';
-            };
-            
-            container.onmouseleave = function(e) {
-              btn.style.boxShadow = '0 0 0 0 transparent';
-              btn.style.opacity = '0';
-              container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
-              container.style.opacity = '.9'
-              count.innerHTML = totalLinks;
+            container.onmouseenter = function (e) {
+                btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
+                btn.style.boxShadow = 'inset 0 0 0 2px #FFF, inset 0 0 0 3px rgb(29, 184, 228)';
+                btn.style.opacity = '1';
+                container.style.boxShadow = 'rgb(196, 196, 196) 0px 0px 0px 1px, rgb(184, 184, 184) 0px 4px 30px 0px';
+                container.style.opacity = '1';
+                count.innerHTML = 'x';
             };
 
-            count.onclick = function(e) {
-              e.preventDefault();
-              e.stopPropagation();
+            container.onmouseleave = function (e) {
+                btn.style.boxShadow = '0 0 0 0 transparent';
+                btn.style.opacity = '0';
+                container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
+                container.style.opacity = '.9';
+                count.innerHTML = totalLinks;
+            };
 
-              container.style.transform = 'scale(0)';
-              container.style.opacity = '0';
-            }
+            count.onclick = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                container.style.transform = 'scale(0)';
+                container.style.opacity = '0';
+            };
 
             container.appendChild(btn);
             container.appendChild(logo);
             container.appendChild(count);
 
-            overlay = document.createElement("div");
+            overlay = document.createElement('div');
             overlay.id = HOST_DIV_ID;
-            var close = document.createElement("div");
-            link = document.createElement("a");
+            let close = document.createElement('div');
+            link = document.createElement('a');
             link.href = url;
-            let title = document.createElement("div");
+            let title = document.createElement('div');
             title.appendChild(link);
             title.appendChild(close);
             overlay.appendChild(title);
@@ -166,7 +165,7 @@ function updateDebugOverlay(tracer, enabled) {
 
         for (let i = 0; i < overlay.childNodes.length; i++) {
             let child = overlay.childNodes[i];
-            if (child.className == "lightstep_span") {
+            if (child.className == 'lightstep_span') {
                 totalLinks++;
             }
         }
@@ -184,21 +183,21 @@ function updateDebugOverlay(tracer, enabled) {
         let joinedSpans = [];
         for (let i = 0; i < spans.length; i++) {
             joinedSpans.push({
-                summary : spans[i].span_name,
-                oldest_micros : spans[i].oldest_micros,
+                summary         : spans[i].span_name,
+                oldest_micros   : spans[i].oldest_micros,
                 youngest_micros : spans[i].youngest_micros,
-                span_guid : spans[i].span_guid,
+                span_guid       : spans[i].span_guid,
             });
         }
         for (let i = 0; i < joinedSpans.length; i++) {
-            for (var j = i + 1; j < joinedSpans.length; j++) {
+            for (let j = i + 1; j < joinedSpans.length; j++) {
                 if ((joinedSpans[j].oldest_micros <= joinedSpans[i].youngest_micros &&
                      joinedSpans[j].youngest_micros >= joinedSpans[i].oldest_micros)) {
                     if (joinedSpans[j].oldest_micros < joinedSpans[i].oldest_micros) {
-                        joinedSpans[i].summary = joinedSpans[j].summary + ", " + joinedSpans[i].summary;
+                        joinedSpans[i].summary = joinedSpans[j].summary + ', ' + joinedSpans[i].summary;
                         joinedSpans[i].oldest_micros = joinedSpans[j].oldest_micros;
                     } else {
-                        joinedSpans[i].summary += ", " + joinedSpans[j].summary;
+                        joinedSpans[i].summary += ', ' + joinedSpans[j].summary;
                     }
                     if (joinedSpans[j].youngest_micros > joinedSpans[i].youngest_micros) {
                         joinedSpans[i].youngest_micros = joinedSpans[j].youngest_micros;
@@ -216,6 +215,5 @@ function updateDebugOverlay(tracer, enabled) {
             totalLinks++;
             count.innerHTML = totalLinks;
         }
-
     });
 }
