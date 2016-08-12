@@ -12,7 +12,7 @@
     "tracing"
   ],
   "author": "duncangraham <duncan@lightstep.com> (http://lightstep.com)",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-core": "^6.3.26",
