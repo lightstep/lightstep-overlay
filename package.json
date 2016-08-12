@@ -1,6 +1,6 @@
 {
   "name": "lightstep-overlay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "an HTML debug overlay with status information about the running tracer",
   "main": "lib/overlay.js",
   "scripts": {
