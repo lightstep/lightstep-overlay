@@ -27,7 +27,6 @@ $(BUNDLE_JS): $(SOURCES_JS)
 node_modules:
 	npm install
 
-
 .PHONY: clean
 clean:
 	rm -rf node_modules/
@@ -38,6 +37,10 @@ clean:
 .PHONY: lint
 lint:
 	$(CMD_ESLINT) --color --fix -c .eslintrc src
+
+# The tests simply check that it builds correctly and has no lint issues
+.PHONY: test
+test: build lint
 
 # Publish to NPM and tag in git
 .PHONY: publish
