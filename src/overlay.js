@@ -1,3 +1,5 @@
+import Tracer from 'opentracing';
+
 //
 // Provide an HTML debug overlay DIV with status information about the running
 // cruntime.
@@ -25,18 +27,15 @@ function updateDebugOverlay(tracer, enabled) {
 
     gDebugOverlayEnabled = true;
 
-    tracer.on('report', function (report) {
+    tracer.on('report', (report) => {
         let spans = report.span_records;
         if (!spans || spans.length === 0) {
             return;
         }
 
-
-        let container, link, logo, div, count;
         let opts = tracer.options();
         let kMaxSpans = 4;
         let totalLinks = 0;
-
 
         // Make a guess about whether we are reporting to a dev instance or not
         // based on the ports being used.
@@ -53,10 +52,11 @@ function updateDebugOverlay(tracer, enabled) {
 
         // Check if the element is there, as some in-page script might have
         // cleared the BODY, etc.
+        let count;
         let overlay = document.getElementById(HOST_DIV_ID);
         if (!overlay) {
-            container = document.createElement('a');
-            container.href = url + 'latest?q=tracer.guid:' + spans[0].runtime_guid;
+            let container = document.createElement('a');
+            container.href = `${url}latest?q=tracer.guid:${spans[0].runtime_guid}`;
             container.style.position = 'fixed';
             container.style.bottom = '2em';
             container.style.right = '2em';
@@ -91,7 +91,7 @@ function updateDebugOverlay(tracer, enabled) {
             badge.style.right = '0em';
 
 
-            logo = document.createElement('img');
+            let logo = document.createElement('img');
             logo.src = 'http://imgur.com/brQx4rK.png';
             logo.style.width = '2em';
             logo.style.position = 'absolute';
@@ -143,7 +143,7 @@ function updateDebugOverlay(tracer, enabled) {
             overlay = document.createElement('div');
             overlay.id = HOST_DIV_ID;
             let close = document.createElement('div');
-            link = document.createElement('a');
+            let link = document.createElement('a');
             link.href = url;
             let title = document.createElement('div');
             title.appendChild(link);
@@ -153,10 +153,11 @@ function updateDebugOverlay(tracer, enabled) {
             document.body.appendChild(overlay);
             document.body.appendChild(container);
 
-            //once all that stuff is done
+            // Once all that stuff is done
+            // Note the getComputedStyle() call is necessary to force the DOM
+            // to update the element so the animation looks correct
             container.style.opacity = '0';
-
-            window.getComputedStyle(container).opacity;
+            window.getComputedStyle(container).opacity; // eslint-disable-line no-unused-expressions
 
             container.style.transform = 'scale(1)';
             container.style.opacity = '1';
@@ -165,7 +166,7 @@ function updateDebugOverlay(tracer, enabled) {
 
         for (let i = 0; i < overlay.childNodes.length; i++) {
             let child = overlay.childNodes[i];
-            if (child.className == 'lightstep_span') {
+            if (child.className === 'lightstep_span') {
                 totalLinks++;
             }
         }
@@ -194,10 +195,10 @@ function updateDebugOverlay(tracer, enabled) {
                 if ((joinedSpans[j].oldest_micros <= joinedSpans[i].youngest_micros &&
                      joinedSpans[j].youngest_micros >= joinedSpans[i].oldest_micros)) {
                     if (joinedSpans[j].oldest_micros < joinedSpans[i].oldest_micros) {
-                        joinedSpans[i].summary = joinedSpans[j].summary + ', ' + joinedSpans[i].summary;
+                        joinedSpans[i].summary = `${joinedSpans[j].summary}, ${joinedSpans[i].summary}`;
                         joinedSpans[i].oldest_micros = joinedSpans[j].oldest_micros;
                     } else {
-                        joinedSpans[i].summary += ', ' + joinedSpans[j].summary;
+                        joinedSpans[i].summary += `, ${joinedSpans[j].summary}`;
                     }
                     if (joinedSpans[j].youngest_micros > joinedSpans[i].youngest_micros) {
                         joinedSpans[i].youngest_micros = joinedSpans[j].youngest_micros;
@@ -210,8 +211,6 @@ function updateDebugOverlay(tracer, enabled) {
         }
 
         for (let i = 0; i < joinedSpans.length && totalLinks <= kMaxSpans; i++) {
-            let span = joinedSpans[i];
-
             totalLinks++;
             count.innerHTML = totalLinks;
         }

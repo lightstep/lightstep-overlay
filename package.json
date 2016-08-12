@@ -2,9 +2,9 @@
   "name": "lightstep-overlay",
   "version": "1.0.0",
   "description": "an HTML debug overlay with status information about the running tracer",
-  "main": "index.js",
+  "main": "lib/overlay.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "make test",
     "webpack": "webpack --display-error-details"
   },
   "keywords": [
@@ -31,5 +31,8 @@
     "source-map-loader": "^0.1.5",
     "source-map-support": "^0.4.2",
     "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "opentracing": "^0.11.x"
   }
 }
