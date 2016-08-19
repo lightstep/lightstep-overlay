@@ -32,7 +32,7 @@ function updateDebugOverlay(tracer, enabled) {
         }
 
 
-        let container, link, logo, div, count;
+        let container, link, logo, div;
         let opts = tracer.options();
         let kMaxSpans = 4;
         let totalLinks = 0;
@@ -67,7 +67,7 @@ function updateDebugOverlay(tracer, enabled) {
             container.style.cursor = "pointer";
             container.style.background = 'rgb(0, 163, 255)';
             container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
-            container.style.transition = '.2s all';
+            container.style.transition = '.25s all cubic-bezier(.38,-0.19,.62,1.23)';
             container.style.transform = 'scale(0)';
             container.style.opacity = '0';
 
@@ -80,16 +80,34 @@ function updateDebugOverlay(tracer, enabled) {
             btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
             btn.style.opacity = '0';
             btn.style.boxShadow = '0 0 0 0 transparent';
-            btn.style.transition = '.5s all';
+            btn.style.transition = '.2s all';
 
-            let badge = document.createElement('div');
-            badge.style.width = '.75em';
-            badge.style.height = '.75em';
-            badge.style.borderRadius = '1em';
-            badge.style.background = 'red';
-            badge.style.position = 'absolute';
-            badge.style.top = '0em';
-            badge.style.right = '0em';
+            let text = document.createElement('p');
+            text.style.position = 'absolute';
+            text.style.top = '0';
+            text.style.left = '3.25em';
+            text.style.lineHeight = '3em';
+            text.style.fontFamily = '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif';
+            text.style.color = '#FFF';
+            text.style.opacity = '0';
+            text.innerHTML = 'View traces';
+            text.style.transition = '.2s all';
+
+            let close = document.createElement('p');
+            close.style.position = 'absolute';
+            close.style.top = '0';
+            close.style.right = '0';
+            close.style.width = '2em';
+            close.style.borderRadius = '0 3rem 3rem 0';
+            close.style.borderLeft = '1px solid rgba(0,0,0,.15)';
+            close.style.boxShadow = 'inset 1px 0 0 0 rgba(255,255,255,.2)';
+            close.style.lineHeight = '3rem';
+            close.style.color = '#FFF';
+            close.style.opacity = '0';
+            close.style.fontSize = '1.5rem';
+            close.style.textAlign = 'center';
+            close.innerHTML = '×';
+            close.style.transition = '.2s all';
 
 
             logo = document.createElement('img');
@@ -99,37 +117,38 @@ function updateDebugOverlay(tracer, enabled) {
             logo.style.top = '.925em';
             logo.style.left = '.5em';
 
-            count = document.createElement('div');
-            count.style.fontSize = '.75em';
-            count.style.position = 'absolute';
-            count.style.top = '-.4rem';
-            count.style.right = '-.4rem';
-            count.style.minWidth = '1.2rem';
-            count.style.height = '1.2rem';
-            count.style.paddingTop = '.2rem';
-            count.style.borderRadius = '1.2em';
-            count.style.textAlign = 'center';
-            count.style.backgroundColor = '#ff7a7a';
-            count.style.color = '#FFF';
-
             container.onmouseenter = function(e) {
               btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
-              btn.style.boxShadow = 'inset 0 0 0 2px #FFF, inset 0 0 0 3px rgb(29, 184, 228)';
               btn.style.opacity = '1'
               container.style.boxShadow = 'rgb(196, 196, 196) 0px 0px 0px 1px, rgb(184, 184, 184) 0px 4px 30px 0px';
               container.style.opacity = '1'
-              count.innerHTML = 'x';
+              container.style.width = '12em'
+              text.style.opacity = '.9'
+              close.style.opacity = '.9'
+              text.style.color = 'rgba(255,255,255,.6)'
+              close.style.color = 'rgba(255,255,255,.6)'
             };
             
             container.onmouseleave = function(e) {
               btn.style.boxShadow = '0 0 0 0 transparent';
               btn.style.opacity = '0';
               container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
-              container.style.opacity = '.9'
-              count.innerHTML = totalLinks;
+              container.style.width = '3em'
+              text.style.opacity = '0'
+              close.style.opacity = '0'
             };
 
-            count.onclick = function(e) {
+            close.onmouseenter = function(e) {
+              close.style.color = 'rgba(255,255,255,.9)'
+              text.style.color = 'rgba(255,255,255,.6)'
+            }
+
+            close.onmouseleave = function(e) {
+              close.style.color = 'rgba(255,255,255,.6)'
+              text.style.color = 'rgba(255,255,255,.9)'
+            }
+
+            close.onclick = function(e) {
               e.preventDefault();
               e.stopPropagation();
 
@@ -139,16 +158,15 @@ function updateDebugOverlay(tracer, enabled) {
 
             container.appendChild(btn);
             container.appendChild(logo);
-            container.appendChild(count);
+            container.appendChild(text);
+            container.appendChild(close);
 
             overlay = document.createElement("div");
             overlay.id = HOST_DIV_ID;
-            var close = document.createElement("div");
             link = document.createElement("a");
             link.href = url;
             let title = document.createElement("div");
             title.appendChild(link);
-            title.appendChild(close);
             overlay.appendChild(title);
 
             document.body.appendChild(overlay);
@@ -214,7 +232,6 @@ function updateDebugOverlay(tracer, enabled) {
             let span = joinedSpans[i];
 
             totalLinks++;
-            count.innerHTML = totalLinks;
         }
 
     });
