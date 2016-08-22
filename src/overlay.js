@@ -1,8 +1,10 @@
+import Tracer from 'opentracing';
+
 //
 // Provide an HTML debug overlay DIV with status information about the running
 // cruntime.
 //
-var gDebugOverlayEnabled = false;
+let gDebugOverlayEnabled = false;
 
 // NOTE: this relies directly on the LightStep implementation and not on the
 // OpenTracing APIs
@@ -25,18 +27,16 @@ function updateDebugOverlay(tracer, enabled) {
 
     gDebugOverlayEnabled = true;
 
-    tracer.on("report", function(report) {
+    tracer.on('report', (report) => {
         let spans = report.span_records;
         if (!spans || spans.length === 0) {
             return;
         }
 
-
-        let container, link, logo, div;
+        let link;
         let opts = tracer.options();
         let kMaxSpans = 4;
         let totalLinks = 0;
-
 
         // Make a guess about whether we are reporting to a dev instance or not
         // based on the ports being used.
@@ -46,25 +46,24 @@ function updateDebugOverlay(tracer, enabled) {
         } else {
             let host = opts.collector_host;
             if (host.match(/^collector[.-]/)) {
-                host = host.replace(/^collector([.-])/, "app$1")
+                host = host.replace(/^collector([.-])/, 'app$1');
             }
             url = `https://${host}/${opts.access_token}/`;
         }
 
         // Check if the element is there, as some in-page script might have
         // cleared the BODY, etc.
-        var overlay = document.getElementById(HOST_DIV_ID);
+        let overlay = document.getElementById(HOST_DIV_ID);
         if (!overlay) {
-        
-            container = document.createElement('a');
-            container.href = url + 'latest?q=tracer.guid:' + spans[0].runtime_guid;
-            container.style.position = "fixed";
-            container.style.bottom = "2em";
-            container.style.right = "2em";
-            container.style.width = "3em";
-            container.style.height = "3em";
-            container.style.borderRadius = "3em";
-            container.style.cursor = "pointer";
+            let container = document.createElement('a');
+            container.href = `${url}latest?q=tracer.guid:${spans[0].runtime_guid}`;
+            container.style.position = 'fixed';
+            container.style.bottom = '2em';
+            container.style.right = '2em';
+            container.style.width = '3em';
+            container.style.height = '3em';
+            container.style.borderRadius = '3em';
+            container.style.cursor = 'pointer';
             container.style.background = 'rgb(0, 163, 255)';
             container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
             container.style.transition = '.25s all cubic-bezier(.38,-0.19,.62,1.23)';
@@ -76,7 +75,7 @@ function updateDebugOverlay(tracer, enabled) {
             btn.style.width = '100%';
             btn.style.height = '100%';
             btn.style.display = 'block';
-            btn.style.borderRadius = "3em";
+            btn.style.borderRadius = '3em';
             btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
             btn.style.opacity = '0';
             btn.style.boxShadow = '0 0 0 0 transparent';
@@ -110,72 +109,72 @@ function updateDebugOverlay(tracer, enabled) {
             close.style.transition = '.2s all';
 
 
-            logo = document.createElement('img');
+            let logo = document.createElement('img');
             logo.src = 'http://imgur.com/brQx4rK.png';
             logo.style.width = '2em';
             logo.style.position = 'absolute';
             logo.style.top = '.925em';
             logo.style.left = '.5em';
 
-            container.onmouseenter = function(e) {
-              btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
-              btn.style.opacity = '1'
-              container.style.boxShadow = 'rgb(196, 196, 196) 0px 0px 0px 1px, rgb(184, 184, 184) 0px 4px 30px 0px';
-              container.style.opacity = '1'
-              container.style.width = '12em'
-              text.style.opacity = '.9'
-              close.style.opacity = '.9'
-              text.style.color = 'rgba(255,255,255,.6)'
-              close.style.color = 'rgba(255,255,255,.6)'
-            };
-            
-            container.onmouseleave = function(e) {
-              btn.style.boxShadow = '0 0 0 0 transparent';
-              btn.style.opacity = '0';
-              container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
-              container.style.width = '3em'
-              text.style.opacity = '0'
-              close.style.opacity = '0'
+            container.onmouseenter = function (e) {
+                btn.style.background = 'linear-gradient(to bottom right,#00d6ff,#3b6fcb 90%)';
+                btn.style.opacity = '1';
+                container.style.boxShadow = 'rgb(196, 196, 196) 0px 0px 0px 1px, rgb(184, 184, 184) 0px 4px 30px 0px';
+                container.style.opacity = '1';
+                container.style.width = '12em';
+                text.style.opacity = '.9';
+                close.style.opacity = '.9';
+                text.style.color = 'rgba(255,255,255,.6)';
+                close.style.color = 'rgba(255,255,255,.6)';
             };
 
-            close.onmouseenter = function(e) {
-              close.style.color = 'rgba(255,255,255,.9)'
-              text.style.color = 'rgba(255,255,255,.6)'
-            }
+            container.onmouseleave = function (e) {
+                btn.style.boxShadow = '0 0 0 0 transparent';
+                btn.style.opacity = '0';
+                container.style.boxShadow = '0 0 0 1px #c4c4c4, 0 2px 20px 0 #e2e2e2';
+                container.style.width = '3em';
+                text.style.opacity = '0';
+                close.style.opacity = '0';
+            };
 
-            close.onmouseleave = function(e) {
-              close.style.color = 'rgba(255,255,255,.6)'
-              text.style.color = 'rgba(255,255,255,.9)'
-            }
+            close.onmouseenter = function (e) {
+                close.style.color = 'rgba(255,255,255,.9)';
+                text.style.color = 'rgba(255,255,255,.6)';
+            };
 
-            close.onclick = function(e) {
-              e.preventDefault();
-              e.stopPropagation();
+            close.onmouseleave = function (e) {
+                close.style.color = 'rgba(255,255,255,.6)';
+                text.style.color = 'rgba(255,255,255,.9)';
+            };
 
-              container.style.transform = 'scale(0)';
-              container.style.opacity = '0';
-            }
+            close.onclick = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                container.style.transform = 'scale(0)';
+                container.style.opacity = '0';
+            };
 
             container.appendChild(btn);
             container.appendChild(logo);
             container.appendChild(text);
             container.appendChild(close);
 
-            overlay = document.createElement("div");
+            overlay = document.createElement('div');
             overlay.id = HOST_DIV_ID;
-            link = document.createElement("a");
+            link = document.createElement('a');
             link.href = url;
-            let title = document.createElement("div");
+            let title = document.createElement('div');
             title.appendChild(link);
             overlay.appendChild(title);
 
             document.body.appendChild(overlay);
             document.body.appendChild(container);
 
-            //once all that stuff is done
+            // Once all that stuff is done
+            // Note the getComputedStyle() call is necessary to force the DOM
+            // to update the element so the animation looks correct
             container.style.opacity = '0';
-
-            window.getComputedStyle(container).opacity;
+            window.getComputedStyle(container).opacity; // eslint-disable-line no-unused-expressions
 
             container.style.transform = 'scale(1)';
             container.style.opacity = '1';
@@ -184,7 +183,7 @@ function updateDebugOverlay(tracer, enabled) {
 
         for (let i = 0; i < overlay.childNodes.length; i++) {
             let child = overlay.childNodes[i];
-            if (child.className == "lightstep_span") {
+            if (child.className === 'lightstep_span') {
                 totalLinks++;
             }
         }
@@ -202,21 +201,21 @@ function updateDebugOverlay(tracer, enabled) {
         let joinedSpans = [];
         for (let i = 0; i < spans.length; i++) {
             joinedSpans.push({
-                summary : spans[i].span_name,
-                oldest_micros : spans[i].oldest_micros,
+                summary         : spans[i].span_name,
+                oldest_micros   : spans[i].oldest_micros,
                 youngest_micros : spans[i].youngest_micros,
-                span_guid : spans[i].span_guid,
+                span_guid       : spans[i].span_guid,
             });
         }
         for (let i = 0; i < joinedSpans.length; i++) {
-            for (var j = i + 1; j < joinedSpans.length; j++) {
+            for (let j = i + 1; j < joinedSpans.length; j++) {
                 if ((joinedSpans[j].oldest_micros <= joinedSpans[i].youngest_micros &&
                      joinedSpans[j].youngest_micros >= joinedSpans[i].oldest_micros)) {
                     if (joinedSpans[j].oldest_micros < joinedSpans[i].oldest_micros) {
-                        joinedSpans[i].summary = joinedSpans[j].summary + ", " + joinedSpans[i].summary;
+                        joinedSpans[i].summary = `${joinedSpans[j].summary}, ${joinedSpans[i].summary}`;
                         joinedSpans[i].oldest_micros = joinedSpans[j].oldest_micros;
                     } else {
-                        joinedSpans[i].summary += ", " + joinedSpans[j].summary;
+                        joinedSpans[i].summary += `, ${joinedSpans[j].summary}`;
                     }
                     if (joinedSpans[j].youngest_micros > joinedSpans[i].youngest_micros) {
                         joinedSpans[i].youngest_micros = joinedSpans[j].youngest_micros;
@@ -229,10 +228,7 @@ function updateDebugOverlay(tracer, enabled) {
         }
 
         for (let i = 0; i < joinedSpans.length && totalLinks <= kMaxSpans; i++) {
-            let span = joinedSpans[i];
-
             totalLinks++;
         }
-
     });
 }
