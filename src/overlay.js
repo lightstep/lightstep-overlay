@@ -86,7 +86,7 @@ function updateDebugOverlay(tracer, enabled) {
             text.style.top = '0';
             text.style.left = '3.25em';
             text.style.lineHeight = '3em';
-            text.style.fontFamily = '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif';
+            text.style.fontFamily = '"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif'; // eslint-disable-line
             text.style.color = '#FFF';
             text.style.opacity = '0';
             text.innerHTML = 'View traces';
