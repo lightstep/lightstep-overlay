@@ -1,6 +1,6 @@
 {
   "name": "lightstep-overlay",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A LightStep in-browser overlay with status information about the latest traces",
   "main": "lib/overlay.js",
   "scripts": {
