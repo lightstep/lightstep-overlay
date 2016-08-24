@@ -12,7 +12,7 @@ An in-browser, development overlay that provides links to real-time tracing data
 
 #### Using the script directly
 
-The [lightstep-overlay.js](dist/lightstep-overlay.js) file can be downloaded and included in your HTML page directly:
+The [lightstep-overlay.min.js](dist/lightstep-overlay.min.js) file can be downloaded and included in your HTML page directly:
 
 ```html
 <script src="lightstep-overlay.min.js"></script>
