@@ -10,6 +10,9 @@ module.exports = {
         library       : "LightStepOverlay",
         libraryTarget : "var",
     },
+    externals : {
+        "opentracing": "Tracer",
+    },
     plugins :[
         new webpack.DefinePlugin({
             DEBUG : false,

@@ -1,11 +1,5 @@
 import Tracer from 'opentracing';
 
-//
-// Provide an HTML debug overlay DIV with status information about the running
-// cruntime.
-//
-let gDebugOverlayEnabled = false;
-
 // NOTE: this relies directly on the LightStep implementation and not on the
 // OpenTracing APIs
 updateDebugOverlay(Tracer.imp(), true);
@@ -21,11 +15,6 @@ function updateDebugOverlay(tracer, enabled) {
     if (!tracer) {
         return;
     }
-    if (gDebugOverlayEnabled) {
-        return;
-    }
-
-    gDebugOverlayEnabled = true;
 
     tracer.on('report', (report) => {
         let spans = report.span_records;
