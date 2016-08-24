@@ -1,7 +1,7 @@
 {
   "name": "lightstep-overlay",
   "version": "1.0.3",
-  "description": "A LightStep in-browser overlay with status information about the latest traces",
+  "description": "An in-browser, development overlay that provides links to real-time tracing data.",
   "main": "lib/overlay.js",
   "scripts": {
     "test": "make test",
@@ -9,7 +9,9 @@
   },
   "keywords": [
     "lightstep",
-    "tracing"
+    "tracing",
+    "distributed tracing",
+    "browser"
   ],
   "author": "duncangraham <duncan@lightstep.com> (http://lightstep.com)",
   "license": "MIT",
