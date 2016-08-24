@@ -2,13 +2,11 @@
 
 An HTML development overlay that provides links to tracing data in real-time in the browser.
 
-![example](doc/example.gif)
-
-
 [![npm version](https://badge.fury.io/js/lightstep-overlay.svg)](https://badge.fury.io/js/lightstep-overlay)
 [![Circle CI](https://circleci.com/gh/lightstep/lightstep-overlay.svg?style=shield)](https://circleci.com/gh/lightstep/lightstep-overlay)
 [![MIT license](http://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
+![example](doc/example.gif)
 
 ### Installation
 
