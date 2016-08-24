@@ -15,7 +15,7 @@ An in-browser, development overlay that provides links to real-time tracing data
 The [lightstep-overlay.js](dist/lightstep-overlay.js) file can be downloaded and included in your HTML page directly:
 
 ```html
-<script src="lightstep-overlay.js"></script>
+<script src="lightstep-overlay.min.js"></script>
 ```
 
 The overlay automatically hooks into the global tracer to determine the tracing configuration.
@@ -26,4 +26,8 @@ The overlay automatically hooks into the global tracer to determine the tracing 
 npm install --save lightstep-overlay
 ```
 
-The overlay script will be located in `node_modules/dist/lightstep-overlay.js`. Include the script in your HTML via whatever mechanism works best for your web application.
+The overlay script will be located in `node_modules/dist/lightstep-overlay.min.js`. Include the script in your HTML via whatever mechanism works best for your web application.
+
+#### Using as a module
+
+The source is compiled down to ES5 code in unbundled form into the `lib` directory. The `package.json` main entry-point uses this code.
