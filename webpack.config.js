@@ -1,21 +1,32 @@
 var webpack = require("webpack");
 
-var defines = {
-    DEBUG : true,
-};
-
 module.exports = {
     entry   : "./src/overlay.js",
     target  : "web",
     devtool : "source-map",
     output  : {
         path          : "dist/",
-        filename      : "lightstep-overlay.js",
+        filename      : "lightstep-overlay.min.js",
         library       : "LightStepOverlay",
         libraryTarget : "var",
     },
     plugins :[
-        new webpack.DefinePlugin(defines),
+        new webpack.DefinePlugin({
+            DEBUG : false,
+        }),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            // beautify: true,
+            compress : {
+                dead_code : true,
+                unused : true,
+                // Hide the dead code warnings. The defines intentionally create
+                // dead code paths.
+                warnings  : false,
+            }
+        }),
+        new webpack.optimize.DedupePlugin(),
     ],
     module  : {
         loaders : [
