@@ -1,29 +1,25 @@
 import Tracer from 'opentracing';
 
-// NOTE: this relies directly on the LightStep implementation and not on the
-// OpenTracing APIs
-updateDebugOverlay(Tracer.imp(), true);
 
 const HOST_DIV_ID = 'lightstep_overlay';
 
-function updateDebugOverlay(tracer, enabled) {
-    // Ignore the case of debugging being enabled then disabled for
-    // reasons of engineering prioritization (not correctness!).
-    if (!enabled) {
-        return;
-    }
+export default function initialize(tracer) {
     if (!tracer) {
         return;
     }
+    const tracerImp = tracer.imp();
+    if (!tracerImp) {
+        return;
+    }
 
-    tracer.on('report', (report) => {
+    tracerImp.on('report', (report) => {
         let spans = report.span_records;
         if (!spans || spans.length === 0) {
             return;
         }
 
         let link;
-        let opts = tracer.options();
+        let opts = tracerImp.options();
         let kMaxSpans = 4;
         let totalLinks = 0;
 
@@ -221,3 +217,11 @@ function updateDebugOverlay(tracer, enabled) {
         }
     });
 }
+
+
+// Try with the global Tracer automatically. It will safely do nothing if there's
+// no global tracer and the client can explicitly initialize the overlay.
+//
+// NOTE: this relies directly on the LightStep implementation and not on the
+// OpenTracing APIs
+initialize(Tracer);
