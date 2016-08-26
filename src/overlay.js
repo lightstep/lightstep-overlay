@@ -1,6 +1,5 @@
 import Tracer from 'opentracing';
 
-
 const HOST_DIV_ID = 'lightstep_overlay';
 
 export default function initialize(tracer) {
