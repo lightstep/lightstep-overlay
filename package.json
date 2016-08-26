@@ -1,6 +1,6 @@
 {
   "name": "lightstep-overlay",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "An in-browser, development overlay that provides links to real-time tracing data.",
   "main": "lib/overlay.js",
   "scripts": {
