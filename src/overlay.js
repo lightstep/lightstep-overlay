@@ -17,7 +17,7 @@ export default function initialize(lightstepTracer) {
         }
 
         let link;
-        let opts = tracer.options();
+        let opts = lightstepTracer.options();
         let kMaxSpans = 4;
         let totalLinks = 0;
 
