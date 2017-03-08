@@ -1,24 +1,23 @@
-import Tracer from 'opentracing';
-
 const HOST_DIV_ID = 'lightstep_overlay';
 
-export default function initialize(tracer) {
+export default function initialize(lightstepTracer) {
     if (!tracer) {
         return;
     }
-    const tracerImp = tracer.imp();
-    if (!tracerImp) {
+
+    if (typeof lightstepTracer.on !== 'function') {
+        console.warn('Incompatible tracer object', tracer); // eslint-disable-line
         return;
     }
 
-    tracerImp.on('report', (report) => {
+    lightstepTracer.on('report', (report) => {
         let spans = report.span_records;
         if (!spans || spans.length === 0) {
             return;
         }
 
         let link;
-        let opts = tracerImp.options();
+        let opts = tracer.options();
         let kMaxSpans = 4;
         let totalLinks = 0;
 
@@ -216,11 +215,3 @@ export default function initialize(tracer) {
         }
     });
 }
-
-
-// Try with the global Tracer automatically. It will safely do nothing if there's
-// no global tracer and the client can explicitly initialize the overlay.
-//
-// NOTE: this relies directly on the LightStep implementation and not on the
-// OpenTracing APIs
-initialize(Tracer);

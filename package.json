@@ -1,6 +1,6 @@
 {
   "name": "lightstep-overlay",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "An in-browser, development overlay that provides links to real-time tracing data.",
   "main": "lib/overlay.js",
   "scripts": {
@@ -11,7 +11,9 @@
     "lightstep",
     "tracing",
     "distributed tracing",
-    "browser"
+    "browser",
+    "apm",
+    "opentracing"
   ],
   "author": "duncangraham <duncan@lightstep.com> (http://lightstep.com)",
   "license": "MIT",
@@ -35,6 +37,5 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "opentracing": "^0.11.x"
   }
 }

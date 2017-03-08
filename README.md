@@ -18,8 +18,7 @@ The [lightstep-overlay.min.js](dist/lightstep-overlay.min.js) file can be downlo
 ```html
 <script src="lightstep-overlay.min.js"></script>
 ```
-* **Initializing with the global tracer:** the overlay automatically hooks into the global tracer to determine the tracing configuration.
-* **Initializing with a tracer object:** the package is exported under the global symbol `LightStepOverlay`.  Call `LightStepOverlay.initialize(tracer)` to initialize overlay.
+**Initializing with a tracer object:** the package is exported under the global symbol `LightStepOverlay`.  Call `LightStepOverlay.initialize(tracer)` to initialize overlay. `tracer` must be a valid `lightstep.Tracer` object.
 
 #### Via NPM:
 
@@ -32,10 +31,10 @@ The overlay script will be located in `node_modules/dist/lightstep-overlay.min.j
 To initialize the overlay call `initialize`:
 
 ```javascript
-import opentracing from 'opentracing';
+import lightstep from 'lightstep-tracer';
 import initializeOverlay from 'lightstep-overlay';
 
-let tracer = /* created you tracer here */;
+let tracer = new lightstep.Tracer(options);
 
 // Initialize the overlay
 initializeOverlay(tracer);
