@@ -1,7 +1,7 @@
 const HOST_DIV_ID = 'lightstep_overlay';
 
 export default function initialize(lightstepTracer) {
-    if (!tracer) {
+    if (!lightstepTracer) {
         return;
     }
 
