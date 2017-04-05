@@ -1,6 +1,6 @@
 const HOST_DIV_ID = 'lightstep_overlay';
 
-export default function initialize(lightstepTracer) {
+export default function initialize(lightstepTracer, options = {}) {
     if (!lightstepTracer) {
         return;
     }
@@ -8,6 +8,17 @@ export default function initialize(lightstepTracer) {
     if (typeof lightstepTracer.on !== 'function') {
         console.warn('Incompatible tracer object', tracer); // eslint-disable-line
         return;
+    }
+
+    let style = {
+        right  : '2em',
+        bottom : '2em',
+    };
+    if (options.bottom !== undefined) {
+        style.bottom = options.bottom;
+    }
+    if (options.right !== undefined) {
+        style.right = options.right;
     }
 
     lightstepTracer.on('report', (report) => {
@@ -41,8 +52,8 @@ export default function initialize(lightstepTracer) {
             let container = document.createElement('a');
             container.href = `${url}latest?q=tracer.guid:${spans[0].runtime_guid}`;
             container.style.position = 'fixed';
-            container.style.bottom = '2em';
-            container.style.right = '2em';
+            container.style.bottom = style.bottom;
+            container.style.right = style.right;
             container.style.width = '3em';
             container.style.height = '3em';
             container.style.borderRadius = '3em';
