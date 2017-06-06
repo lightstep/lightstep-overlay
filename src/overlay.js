@@ -104,7 +104,7 @@ export default function initialize(lightstepTracer, options = {}) {
 
 
             let logo = document.createElement('img');
-            logo.src = 'http://imgur.com/brQx4rK.png';
+            logo.src = '/static/images/logo-white.svg';
             logo.style.width = '2em';
             logo.style.position = 'absolute';
             logo.style.top = '.925em';
