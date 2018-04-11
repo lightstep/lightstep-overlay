@@ -51,6 +51,7 @@ export default function initialize(lightstepTracer, options = {}) {
         if (!overlay) {
             let container = document.createElement('a');
             container.href = `${url}latest?q=tracer.guid:${spans[0].runtime_guid}`;
+            container.className = 'lightstep-overlay-helper';
             container.style.position = 'fixed';
             container.style.bottom = style.bottom;
             container.style.right = style.right;
